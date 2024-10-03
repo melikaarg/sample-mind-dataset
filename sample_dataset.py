@@ -14,7 +14,7 @@ df_bahavior = pd.read_csv(behavior_path, sep="\t", index_col=0, header=None)
 df_news = pd.read_csv(news_path, sep="\t", index_col=0, header=None)
 
 # df_bahavior_sample = df_bahavior.sample(n=10, replace=False, random_state=1)
-df_bahavior_sample = df_bahavior.sample(n=10, replace=False, random_state=12)
+df_bahavior_sample = df_bahavior.sample(n=100, replace=False, random_state=12)
 
 news = []
 
@@ -44,13 +44,14 @@ print(df_news_sample.head(10))
 
 def escape_special_chars(value):
     if isinstance(value, str):
-        return value.replace('"', '\\"')
+        return value.replace('""', '"')
     return value
 
 #
 # df_news_sample.loc[:, 6] = df_news_sample.loc[:, 6].apply(escape_special_chars)
 # df_news_sample.loc[:, 7] = df_news_sample.loc[:, 7].apply(escape_special_chars)
-# df_news_sample.loc[:, 6] = df_news_sample.loc[:, 6].map(lambda x: str(x).replace("'", ''))
+# df_news_sample.loc[:, 6] = df_news_sample.loc[:, 6].map(lambda x: json.dumps(x))
+# df_news_sample.loc[:, 6] = df_news_sample.loc[:, 7].map(lambda x: json.dumps(x))
 # df_news_sample.loc[:, 7] = df_news_sample.loc[:, 7].map(lambda x: str(x).replace("'", ''))
 # df_news_sample.loc[:, 7] = df_news_sample.loc[:, 7].map(lambda x: json.dumps(x))
 
@@ -58,6 +59,9 @@ print(df_news_sample.head(10))
 # Save the filtered DataFrame to a TSV file
 #
 #
-df_news_sample.to_csv(output_news_path, sep='\t', index=True, header=False, quoting=csv.QUOTE_NONE)
-df_bahavior_sample.to_csv(output_behavior_path, sep='\t', index=True, header=False)
-#
+df_news_sample.to_csv(output_news_path, sep='\t', index=True, header=False, escapechar='\t')
+df_bahavior_sample.to_csv(output_behavior_path, sep='\t', index=True, header=False, quoting=csv.QUOTE_NONE, escapechar='\t')
+
+
+# df_bahavior_sample.to_csv(output_behavior_path, sep='\t', index=True, header=False, escapechar='\t')
+# df_news_sample.to_csv(output_news_path, sep='\t', index=True, header=False)
