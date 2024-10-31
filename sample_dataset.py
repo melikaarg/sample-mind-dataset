@@ -3,19 +3,23 @@ import json
 import pandas as pd
 import csv
 
-mode = "test"
+mode = "train"
 behavior_path = ("/home/melika/Documents/code/news-recommendation-v1/sampleDataset" + f"/{mode}/behaviors.tsv")
 news_path = ("/home/melika/Documents/code/news-recommendation-v1/sampleDataset" + f"/{mode}/news.tsv")
 
-output_behavior_path = ("/home/melika/Documents/code/news-recommendation-v1/sampleDataset" + "/behaviors.tsv")
-output_news_path = ("/home/melika/Documents/code/news-recommendation-v1/sampleDataset" + "/news.tsv")
+output_behavior_path = ("/home/melika/Documents/code/news-recommendation-v1/sampleDataset/sample_5000" + "/behaviors.tsv")
+output_news_path = ("/home/melika/Documents/code/news-recommendation-v1/sampleDataset/sample_5000" + "/news.tsv")
 
 df_bahavior = pd.read_csv(behavior_path, sep="\t", index_col=0, header=None)
 df_news = pd.read_csv(news_path, sep="\t", index_col=0, header=None)
 
 # df_bahavior_sample = df_bahavior.sample(n=10, replace=False, random_state=1)
-df_bahavior_sample = df_bahavior.sample(n=100, replace=False, random_state=12)
+df_bahavior_unuique = df_bahavior.iloc[:, 1].unique()
+# df_bahavior_sample_users = df_bahavior_unuique.sample(n=5000, replace=False, random_state=12)
+df_bahavior_sample_users = pd.Series(df_bahavior_unuique).sample(n=5000, replace=False, random_state=12)
 
+# Filter df_bahavior to get rows with user IDs in df_bahavior_sample_users
+df_bahavior_sample = df_bahavior[df_bahavior.iloc[:, 1].isin(df_bahavior_sample_users)]
 news = []
 
 # df_news[3] = df_news[3].map(lambda x: x.replace("'", ""))
